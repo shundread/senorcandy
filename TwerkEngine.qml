@@ -6,37 +6,49 @@ Item {
     Timer {
         id: manager
         property int ticks: 0
+
+        // Moments
         property var moments: []
+        property int momentIndex: 0
+
         interval: 100
         running: true
         repeat: true
-        Component.onCompleted: start()
+        //Component.onCompleted: start()
         onTriggered: {
-            switch (ticks++) {
-            case 50:
-                moments[0].on = true;
-                break;
-            case 100:
-                moments[0].on = false;
-                break;
-            default:
-                break;
+            ticks++
+            var currentTime = time()
+
+            // Advancing through the moments
+            while(momentIndex < moments.length &&
+                  currentTime > moments[momentIndex].end)
+            {
+                moments[momentIndex].on=false
+                momentIndex++
+                console.log("momentIndex is now", momentIndex)
+                if(momentIndex > moments.length)
+                {
+                    console.log("End of the game/stage")
+                    repeat = false
+                    return
+                }
+                moments[momentIndex].on=true
             }
+        }
+        function time() {
+            //return music.position
+            return ticks * interval
+        }
+
+        function restart() {
+            ticks = 0
         }
     }
 
-    /*
     Audio {
         id: audio
         source: "audio/track1.wav"
-        onStatusChanged: {
-            console.log("Status has changed")
-        }
-        onPositionChanged: {
-            console.log("Music position changed")
-        }
     }
-    */
 
     Accelerometer {
         id: accelerometer
@@ -48,41 +60,74 @@ Item {
     }
 
     Instantiator {
-        model: 2
+        model: [
+            {start: 0,    end: 3000,  twerks: 2.0,  tolerance:0.5, policy:0},
+            {start: 3000, end: 6000,  twerks: 2.0,  tolerance:0.5, policy:1},
+            {start: 6000, end: 9000,  twerks: 2.0,  tolerance:0.5, policy:2},
+            {start: 9000, end: 12000, twerks: 2.0,  tolerance:0.5, policy:1},
+        ]
         delegate: QtObject {
             id: moment
-            property alias on: binding.when
-            property real twerks: 2
-            property real tolerance: 0.5
-            property real amplitude
+
+            //Arguments
+            property int start: modelData.start
+            property int end: modelData.end
+            property real twerks: modelData.twerks
+            property real tolerance: modelData.tolerance
+            property int policy: modelData.policy
+            // Policies:
+            // 0 - Ignore twerking (allow free movement at some points)
+            // 1 - Reward twerking (sync with synth)
+            // 2 - Punish twerking (sync with silence)
+
+            // Accumulated twerk data
+            property int twerkCount
+            property real twerkForce
             property int samples
+
+            // State data
+            property bool on: false
+            property real amplitude
             property vector3d previousValue
             property vector3d value
+
             onValueChanged: {
-                //console.log('New sample', value)
                 if (value.dotProduct(previousValue) < 0) {
                     console.log('change in direction, average accel:', amplitude/samples)
-                    amplitude = 0;
-                    samples = 0;
+                    twerkForce += amplitude; //Somehow multiply this by the sampling interval?
+                    twerkCount += 1;
                 }
                 previousValue = value;
                 amplitude += value.length();
                 ++samples;
             }
 
+            onOnChanged: {
+                console.log("Moment(", start, end, ") set to on =", on)
+                if(on == false)
+                {
+                    console.log("Moment ended: Twerk Count(", twerkCount,"), Accumulated Twerk Force(", twerkForce,")")
+                }
+            }
+
             property Binding binding: Binding {
                 id: binding
-                when: true//false
+                when: moment.on
                 target: moment
                 property: "value"
                 value: Qt.vector3d(accelerometer.reading.x, accelerometer.reading.y, accelerometer.reading.z)
             }
         }
-        onObjectAdded: manager.moments = manager.moments.concat(object)
+        onObjectAdded:
+        {
+            console.log("New object:", object)
+            manager.moments = manager.moments.concat(object)
+        }
     }
 
     function start() {
         audio.play()
+        manager.start()
     }
 }
 

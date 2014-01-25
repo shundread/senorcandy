@@ -34,21 +34,6 @@ Window {
         TwerkEngine {
             id: twerker
         }
-
-        Audio {
-            id: audio
-            source: "/audio/track1.wav"
-            Component.onCompleted: {
-                console.log(errorString)
-                play()
-            }
-            onStatusChanged: {
-                console.log("Status has changed")
-            }
-            onPositionChanged: {
-                console.log("Music position changed")
-            }
-        }
     }
 
 }
