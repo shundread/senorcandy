@@ -3,8 +3,10 @@
 #include <QQmlContext>
 #include <qqml.h>
 
+#ifdef Q_OS_WINRT
 #include "accelerometer.h"
 #include "audio.h"
+#endif
 
 int main(int argc, char *argv[])
 {

@@ -25,16 +25,26 @@ Item {
         }
     }
 
+    /*
     Audio {
         id: audio
         source: "audio/track1.wav"
-        Component.onCompleted: play()
+        onStatusChanged: {
+            console.log("Status has changed")
+        }
+        onPositionChanged: {
+            console.log("Music position changed")
+        }
     }
+    */
 
     Accelerometer {
         id: accelerometer
-        property vector3d previous
-        onReadingChanged: previous = reading
+        active: true
+        dataRate: 10
+        onReadingChanged: {
+            //console.log("Reading changed: "+ reading.x + " " + reading.y + " " + reading.z)
+        }
     }
 
     Instantiator {
@@ -49,6 +59,7 @@ Item {
             property vector3d previousValue
             property vector3d value
             onValueChanged: {
+                //console.log('New sample', value)
                 if (value.dotProduct(previousValue) < 0) {
                     console.log('change in direction, average accel:', amplitude/samples)
                     amplitude = 0;
@@ -64,10 +75,14 @@ Item {
                 when: true//false
                 target: moment
                 property: "value"
-                value: accelerometer.reading
+                value: Qt.vector3d(accelerometer.reading.x, accelerometer.reading.y, accelerometer.reading.z)
             }
         }
         onObjectAdded: manager.moments = manager.moments.concat(object)
+    }
+
+    function start() {
+        audio.play()
     }
 }
 

@@ -1,4 +1,4 @@
-QT = core gui quick qml
+QT += core gui quick sensors qml multimedia
 
 SOURCES = main.cpp
 
@@ -21,6 +21,8 @@ DEPLOYMENT += fonts
 audio.files = audio/*
 audio.path = /audio
 DEPLOYMENT += audio
+
+INSTALLS += audio/track1.wav
 
 RESOURCES += \
     resources.qrc

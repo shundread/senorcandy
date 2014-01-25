@@ -3,5 +3,6 @@
         <file>Button.qml</file>
         <file>main.qml</file>
         <file>TwerkEngine.qml</file>
+        <file>audio/track1.wav</file>
     </qresource>
 </RCC>
