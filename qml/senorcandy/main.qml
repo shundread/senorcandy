@@ -40,7 +40,7 @@ ApplicationWindow {
         dataRate: 50
         active:true
 
-
+        /*
         onReadingChanged: {
             var newX = (bubble.x + calcRoll(accel.reading.x, accel.reading.y, accel.reading.z) * 0.1)
             var newY = (bubble.y - calcPitch(accel.reading.x, accel.reading.y, accel.reading.z) * 0.1)
@@ -75,8 +75,11 @@ ApplicationWindow {
                 rectlist.itemAt(y).width = accelData[sample].length()*20
                 y++
             }
+            console.log(synth.position())
         }
+        */
     }
+
 
     Text {
         id: output
@@ -118,6 +121,62 @@ ApplicationWindow {
     Audio {
         id: drums
         source: "twerk_drums.wav"
+    }
+
+    Timer {
+        id:momentManager
+        interval:100
+        running: true
+        repeat: true
+        property int currentIndex: 0
+        property var moments: []
+        onTriggered: {
+            console.log("synth.position =" + synth.position)
+            console.log("Current index: " + currentIndex)
+            console.log("count: " + momentList.count)
+            var pos = synth.position
+            while(
+                moments.length > currentIndex &&
+                pos > moments[currentIndex].end
+            )
+            {
+                currentIndex++
+                console.log("currentIndex++ (now " + currentIndex + ")")
+            }
+            if(currentIndex > moments.length)
+            {
+                console.log("We moved past the next index")
+                repeat = false
+                return
+            }
+            if(pos > moments[currentIndex].start)
+            {
+                console.log("Calling handleSample")
+                var sample = Qt.vector3d(accel.reading.x, accel.reading.y, accel.reading.z)
+                moments[currentIndex].handleSample(sample)
+            }
+        }
+    }
+
+    Instantiator {
+        id: momentList
+        model: [
+            //start, end, threshold, twerks
+            {start: 1000,  end: 5000,  twerks: 1.8, threshold: 0.5},
+            {start: 10000, end: 50000, twerks: 1.8, threshold: 0.5},
+            {start: 10000, end: 50000, twerks: 1.8, threshold: 0.5},
+        ]
+        Moment {
+            start: modelData.start
+            end: modelData.end
+            twerks: modelData.twerks
+            threshold: modelData.threshold
+        }
+        onObjectAdded:
+        {
+            momentManager.moments = momentManager.moments.concat(object)
+            console.log("Generated a new object: " + object)
+        }
     }
 
 
