@@ -24,17 +24,20 @@
 
 import QtQuick 2.1
 import QtQuick.Controls 1.0
-
+import QtMultimedia 5.0
 import QtSensors 5.0
 
 ApplicationWindow {
     title: qsTr("Accelerate Bubble")
     id: mainWindow
     visible: true
+    property var accelData: []
+    property var rects: []
+    property var divisor: 5
 
     Accelerometer {
         id: accel
-        dataRate: 10
+        dataRate: 50
         active:true
 
 
@@ -57,7 +60,21 @@ ApplicationWindow {
                 bubble.x = newX
                 bubble.y = newY
 
-            output.text = "x: " + accel.reading.x + "\ny: " + accel.reading.y + "\nz: " + accel.reading.z + "\nwidth: " + mainWindow.width + "height: " + mainWindow.height
+            var newVector = Qt.vector3d(accel.reading.x, accel.reading.y, accel.reading.z)
+            if(newVector.length() > 15)
+                airhorn.play()
+            accelData = accelData.concat(newVector)
+            //output.text = "x: " + accel.reading.x + "\ny: " + accel.reading.y + "\nz: " + accel.reading.z + "\nwidth: " + mainWindow.width + "height: " + mainWindow.height + "\nSamples: " + accelData.length + "\nLength:" + newVector.length()
+
+            if(accelData.length > mainWindow.height/divisor)
+                accelData = accelData.slice(1)
+            //console.log(accelData)
+            var y = 0
+            for(var sample in accelData)
+            {
+                rectlist.itemAt(y).width = accelData[sample].length()*20
+                y++
+            }
         }
     }
 
@@ -75,6 +92,29 @@ ApplicationWindow {
     }
     function calcRoll(x, y, z) {
         return -(Math.atan(x / Math.sqrt(y * y + z * z)) * 57.2957795);
+    }
+
+    Audio {
+        id: airhorn
+        source: "single_airhorn.wav"
+    }
+
+    Item {
+        //Give the repeater a name
+
+        id: rectlistitem
+        anchors.fill: parent
+        Repeater {
+            id: rectlist
+            model: (rectlistitem.height)/divisor
+            Rectangle {
+                x: 0
+                y: index*divisor
+                width: 10
+                height: divisor
+                color: "#000000"
+            }
+        }
     }
 
     Image {

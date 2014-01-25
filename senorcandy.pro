@@ -6,7 +6,7 @@ DEPLOYMENTFOLDERS = folder_01
 # Additional import path used to resolve QML modules in Creator's code model
 QML_IMPORT_PATH =
 
-QT += quick sensors svg xml
+QT += quick sensors svg xml multimedia
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp
@@ -15,6 +15,7 @@ SOURCES += main.cpp
 app.files = \
     $$files(*.qml) \
     drawing.svg \
+    single_airhorn.wav \
     content \
     images
 
