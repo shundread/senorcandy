@@ -1,1 +1,17 @@
 senorcandy.pro.user
+*.qmake*
+Makefile*
+*.dll
+*.qmltypes
+qmldir
+WMAppManifest.xml
+AppxManifest.xml
+assets/*
+fonts/*
+debug/*
+release/*
+*.suo
+*.opensdf
+*.sdf
+*.vcxproj*
+*.windeployqt*
