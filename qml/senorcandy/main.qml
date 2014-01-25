@@ -94,10 +94,32 @@ ApplicationWindow {
         return -(Math.atan(x / Math.sqrt(y * y + z * z)) * 57.2957795);
     }
 
+    Component.onCompleted: {
+        synth.play()
+        bass.play()
+        drums.play()
+    }
+
     Audio {
         id: airhorn
         source: "single_airhorn.wav"
     }
+
+    Audio {
+        id: synth
+        source: "twerk_synths.wav"
+    }
+
+    Audio {
+        id: bass
+        source: "twerk_bass.wav"
+    }
+
+    Audio {
+        id: drums
+        source: "twerk_drums.wav"
+    }
+
 
     Item {
         //Give the repeater a name
