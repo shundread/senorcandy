@@ -32,6 +32,7 @@ Audio::Audio(QObject *parent) :
     ComPtr<IMFMediaEngineClassFactory> factory;
     hr = CoCreateInstance(CLSID_MFMediaEngineClassFactory, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&factory));
     hr = factory->CreateInstance(0, d->attributes.Get(), &d->player);
+    hr = d->player->SetLoop(true);
 }
 
 Audio::~Audio()
@@ -64,4 +65,9 @@ int Audio::position() const
 void Audio::play()
 {
     HRESULT hr = d->player->Play();
+}
+
+void Audio::stop()
+{
+    HRESULT hr = d->player->Pause();
 }

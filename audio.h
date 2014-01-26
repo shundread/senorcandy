@@ -22,6 +22,7 @@ public:
     int position() const;
 
     Q_INVOKABLE void play();
+    Q_INVOKABLE void stop();
 
 signals:
     void sourceChanged();

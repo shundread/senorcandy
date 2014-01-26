@@ -5,5 +5,19 @@
         <file>TwerkEngine.qml</file>
         <file>audio/track1.wav</file>
         <file>audio/airhorn.wav</file>
+        <file>images/title.png</file>
+        <file>Candy.qml</file>
+        <file>images/crotch.png</file>
+        <file>images/head.png</file>
+        <file>images/leftarm.png</file>
+        <file>images/lefthand.png</file>
+        <file>images/leftleg.png</file>
+        <file>images/leftthigh.png</file>
+        <file>images/rightarm.png</file>
+        <file>images/righthand.png</file>
+        <file>images/righthigh.png</file>
+        <file>images/rightleg.png</file>
+        <file>images/torso.png</file>
+        <file>images/start.png</file>
     </qresource>
 </RCC>
