@@ -27,10 +27,11 @@ Item {
         onTriggered: {
             ticks++
             var currentTime = time()
+            console.log("currentTime: ", currentTime)
 
             // Advancing through the moments
             while(momentIndex < moments.length &&
-                  currentTime > moments[momentIndex].end)
+                  currentTime >= moments[momentIndex].end)
             {
                 moments[momentIndex].on=false
                 momentIndex++
@@ -76,7 +77,7 @@ Item {
     Accelerometer {
         id: accelerometer
         active: true
-        dataRate: 50
+        dataRate: 20
         onReadingChanged: {
             //console.log("Reading changed: "+ reading.x + " " + reading.y + " " + reading.z)
         }
@@ -257,6 +258,9 @@ Item {
             property bool onPeak: false
 
             onValueChanged: {
+                var valueLength = value.length()
+                var previousValueLength = previousValue.length()
+
                 //Dot twerk
                 if (value.dotProduct(previousValue) < 0) {
                     twerkForce += amplitude; //Somehow multiply this by the sampling interval?
@@ -270,19 +274,19 @@ Item {
                     console.log("Cross Twerk")
 
                 //Amplitude twerk
-                if(value.length() > previousValue.length())
+                if(valueLength > previousValueLength)
                     if(value.length() > 12)
                         if(onPeak == false)
                             onPeak = true
-                if(value.length() < previousValue.length())
-                    if(value.length() < 12)
+                if(valueLength < previousValueLength)
+                    if(valueLength < 12)
                         if(onPeak == true)
                         {
                             console.log("Peak Twerk")
                             onPeak = false
                         }
                 previousValue = value;
-                amplitude += value.length();
+                amplitude += valueLength;
                 ++samples;
             }
 
