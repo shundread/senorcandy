@@ -6,7 +6,8 @@
 class MomentPrivate
 {
 public:
-    MomentPrivate() : on(false), start(0), end(0), twerkGoal(0), twerkPolicy(0) { }
+    MomentPrivate() : on(false), start(0), end(0), twerkGoal(0), twerkPolicy(0),
+        peakTwerkCount(0), twerkCount(0), twerkForce(0), amplitude(0), samples(0), onPeak(false) { }
     bool on;
     int start;
     int end;
@@ -17,9 +18,9 @@ public:
     int peakTwerkCount;
     int twerkCount;
     qreal twerkForce;
+    qreal amplitude;
     int samples;
 
-    qreal amplitude;
     QVector3D previousValue;
 
     bool onPeak;
@@ -50,13 +51,13 @@ void Moment::setOn(bool on)
     emit onChanged();
 
     if (d->on) {
-        qDebug("[Moment] start: %d, end: %d, set to on: %b, policy is %d", d->start, d->end, d->on, d->twerkPolicy);
+        qDebug("[Moment] start: %d, end: %d, set to on: %d, policy is %d", d->start, d->end, d->on, d->twerkPolicy);
         // connect to sensor reading signal...
         connect(d->manager->sensor(), SIGNAL(readingChanged()), this, SLOT(onSensorReading()));
     }
 
     if (!d->on) {
-        qDebug("[Moment] ended: Twerk count: %d, Accumulated Twerk Force: %d", d->twerkCount, d->twerkForce);
+        qDebug("[Moment] ended: Twerk count: %d, Accumulated Twerk Force: %f", d->twerkCount, d->twerkForce);
         d->manager->sensor()->disconnect(this);
 
         // Case 0:
@@ -67,6 +68,7 @@ void Moment::setOn(bool on)
         // Case 1:
         // We want to see you shake your ass
         if (d->twerkPolicy == 1) {
+            qDebug("setting score %d", d->manager->score() + d->twerkCount);
             d->manager->setScore(d->manager->score() + d->twerkCount);
             d->manager->setPeakScore(d->manager->peakScore() + d->peakTwerkCount);
             return;

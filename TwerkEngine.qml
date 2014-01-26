@@ -4,6 +4,10 @@ import QtMultimedia 5.0
 import Moments 1.0
 
 Item {
+
+    property alias score: momentManager.score
+    property alias negativeScore: momentManager.negativeScore
+
     Timer {
         id: manager
         property int ticks: 0
@@ -81,7 +85,6 @@ Item {
         //onReadingChanged: console.log("Reading changed", reading.x, reading.y, reading.z)
     }
 
-    //Instantiator {
     MomentManager {
         id: momentManager
         sensor: accelerometer
