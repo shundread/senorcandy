@@ -4,9 +4,11 @@ import QtMultimedia 5.0
 import Moments 1.0
 
 Item {
-
+    id: engine
     property alias score: momentManager.score
     property alias negativeScore: momentManager.negativeScore
+
+    signal moved()
 
     Timer {
         id: manager
@@ -87,6 +89,7 @@ Item {
 
     MomentManager {
         id: momentManager
+        onMoved: if (manager.running) engine.moved()
         sensor: accelerometer
         moments: [
             // Intro

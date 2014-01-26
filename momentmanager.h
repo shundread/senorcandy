@@ -79,6 +79,7 @@ signals:
     void peakScoreChanged();
     void negativeScoreChanged();
     void negativePeakScoreChanged();
+    void moved();
 
 private:
     void setScore(int score);

@@ -137,7 +137,7 @@ void Moment::setTwerkPolicy(int twerkPolicy)
     d->twerkPolicy = twerkPolicy;
     emit twerkPolicyChanged();
 }
-#include <QDebug>
+
 void Moment::onSensorReading()
 {
     QVariant reading = d->manager->sensor()->property("reading");
@@ -157,6 +157,7 @@ void Moment::onSensorReading()
     if (QVector3D::dotProduct(value, d->previousValue) < 0) {
         d->twerkForce += d->amplitude; //Somehow multiply this by the sampling interval?
         ++d->twerkCount;
+        emit d->manager->moved();
         qDebug("[Moment] Classing Twerk");
     }
 

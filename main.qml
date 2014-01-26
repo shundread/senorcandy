@@ -41,13 +41,11 @@ Window {
             }
         }
 
-        Loader {
+        TwerkEngine {
             id: twerker
-            asynchronous: true
-            onStatusChanged: {
-                if (status == Loader.Ready)
-                    item.start()
-            }
+            property int candyState: 0
+            property var candyStates: ["", "croutch", "armscrossed", "stand", "chill"]
+            onMoved: candy.state = candyStates[Math.floor(Math.random() * 5)]
         }
 
         Candy {
@@ -101,6 +99,7 @@ Window {
         MouseArea {
             id: startButton
             opacity: 0
+            visible: false
             anchors { left: parent.horizontalCenter; right: parent.right; top: parent.top; bottom: parent.bottom }
             Image {
                 anchors.centerIn: parent
@@ -110,6 +109,7 @@ Window {
             states: [
                 State {
                     name: "ready"
+                    PropertyChanges { target: startButton; visible: true }
                     PropertyChanges { target: startButton; opacity: 1 }
                 },
                 State {
@@ -131,10 +131,38 @@ Window {
                 easing.type: Easing.CosineCurve; duration: 2000
             }
             onClicked:  {
-                introMusic.stop()
-                twerker.source = "TwerkEngine.qml"
+                introMusic.stop();
                 startButton.state = "done"
-                gameModeTransition.start()
+                gameModeTransition.start();
+                chillTimer.stop();
+                twerker.start();
+            }
+        }
+
+        /*Text {
+            anchors { top: parent.top; left: parent.left; margins: 20 }
+            font.pixelSize: 96
+            font.bold: true
+            color: "white"
+            style: Text.Outline
+            styleColor: "black" // TODO: Make this change based on score
+            text: twerker.score
+        }*/
+
+        Column {
+            anchors { top: parent.top; bottom: parent.bottom }
+            width: parent.width / 20
+            add: Transition { NumberAnimation { properties: "y" } }
+            move: Transition { NumberAnimation { properties: "y" } }
+            populate: Transition { NumberAnimation { properties: "y" } }
+            Repeater {
+                model: Math.round((twerker.score - twerker.negativeScore)/10)
+                Rectangle {
+                    width: parent.width
+                    height: parent.height / 5
+                    border { width: 3; color: "black" }
+                    color: "blue"
+                }
             }
         }
     }
