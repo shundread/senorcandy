@@ -60,10 +60,7 @@ def main():
 
         if keysdown:
             stamp = music.get_pos()
-            if pygame.key.get_pressed()[pygame.K_d]:
-                twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 3))
-            else:
-                twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 1))
+            twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 1))
 
     if len(twerkList) == 0:
         return
