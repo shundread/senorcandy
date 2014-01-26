@@ -19,6 +19,13 @@ Window {
         ColorAnimation { target: window; property: "color"; to: "skyblue"; duration: 1000 }
     }
 
+    Rectangle {
+        anchors.fill: parent
+        color: "white"
+        opacity: twerker.twerking ? 0.9 : 0
+        Behavior on opacity { NumberAnimation { duration: 50 } }
+    }
+
     Item {
         id: root
         width: window.height
@@ -44,17 +51,9 @@ Window {
         TwerkEngine {
             id: twerker
             property int candyState: 0
-            property var candyStates: ["", "croutch", "armscrossed", "stand", "chill"]
-            onMoved: candy.state = candyStates[Math.floor(Math.random() * 5)]
-        }
-
-        Candy {
-            id: candy
-            scale: 0.75
-            x: 600
-            y: 100
-            state: "armscrossed"
-            opacity: 0
+            property var candyStates: ["stand", "crouch", "armscrossed", "jump"]
+            onMoved: candy.state = candyStates[candyState++ % 4]
+            anchors.fill: parent
         }
 
         // Candy's intro animation
@@ -76,7 +75,8 @@ Window {
             repeat: true
             interval: 500
             onTriggered: {
-                candy.state = candy.state == "chill" ? "" : "chill"
+                if (!twerker.twerking)
+                    candy.state = candy.state == "chill" ? "" : "chill"
             }
         }
 
@@ -134,35 +134,96 @@ Window {
                 introMusic.stop();
                 startButton.state = "done"
                 gameModeTransition.start();
-                chillTimer.stop();
+                //chillTimer.stop();
                 twerker.start();
             }
         }
 
-        /*Text {
-            anchors { top: parent.top; left: parent.left; margins: 20 }
-            font.pixelSize: 96
-            font.bold: true
-            color: "white"
-            style: Text.Outline
-            styleColor: "black" // TODO: Make this change based on score
-            text: twerker.score
-        }*/
-
-        Column {
-            anchors { top: parent.top; bottom: parent.bottom }
-            width: parent.width / 20
+        Row {
+            anchors { top: parent.top; left: parent.left }
+            height: root.height / 10
             add: Transition { NumberAnimation { properties: "y" } }
-            move: Transition { NumberAnimation { properties: "y" } }
-            populate: Transition { NumberAnimation { properties: "y" } }
             Repeater {
-                model: (twerker.score - twerker.negativeScore)
+                model: Math.min(70, twerker.score)
                 Rectangle {
-                    width: parent.width
-                    height: parent.height / 5
+                    width: root.width / 70
+                    height: root.height / 10
+                    border { width: 3; color: "black" }
+                    color: "green"
+                }
+            }
+        }
+
+        Row {
+            anchors { top: parent.top; left: parent.left }
+            height: root.height / 10
+            add: Transition { NumberAnimation { properties: "y" } }
+            Repeater {
+                model: Math.max(0, twerker.score - 70)
+                Rectangle {
+                    width: root.width / 70
+                    height: root.height / 10
                     border { width: 3; color: "black" }
                     color: "blue"
                 }
+            }
+        }
+
+        Row {
+            anchors { bottom: parent.bottom; left: parent.left }
+            height: root.height / 10
+            add: Transition { NumberAnimation { properties: "y" } }
+            Repeater {
+                model: Math.min(35, twerker.negativeScore)
+                Rectangle {
+                    width: root.width / 35
+                    height: root.height / 10
+                    border { width: 3; color: "black" }
+                    color: "yellow"
+                }
+            }
+        }
+
+        Row {
+            anchors { bottom: parent.bottom; left: parent.left }
+            height: root.height / 10
+            add: Transition { NumberAnimation { properties: "y" } }
+            Repeater {
+                model: Math.max(0, twerker.negativeScore - 35)
+                Rectangle {
+                    width: root.width / 35
+                    height: root.height / 10
+                    border { width: 3; color: "black" }
+                    color: "red"
+                }
+            }
+        }
+
+        Candy {
+            id: candy
+            scale: 0.75
+            x: 600
+            y: 100
+            state: "armscrossed"
+            opacity: 0
+        }
+
+        MouseArea {
+            anchors.fill: parent
+            visible: twerker.atEnd
+            onClicked: twerker.start()
+            scale: pressed ? 0.8 : 1
+            Image {
+                id: pass
+                anchors.centerIn: parent
+                source: "images/pass.png"
+                visible: (twerker.score - twerker.negativeScore * 2) > 50
+            }
+            Image {
+                id: fail
+                anchors.centerIn: parent
+                source: "images/fail.png"
+                visible: !pass.visible
             }
         }
     }

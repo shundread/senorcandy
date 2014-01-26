@@ -20,5 +20,7 @@
         <file>images/torso.png</file>
         <file>images/start.png</file>
         <file>audio/senorcandyass.wav</file>
+        <file>images/fail.png</file>
+        <file>images/pass.png</file>
     </qresource>
 </RCC>

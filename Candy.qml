@@ -352,6 +352,81 @@ Item {
                 rotation: 4
             }
 
+        },
+        State {
+            name: "jump"
+
+            PropertyChanges {
+                target: image3
+                x: 39
+                y: 227
+                rotation: 56
+            }
+
+            PropertyChanges {
+                target: image10
+                x: 91
+                y: 212
+            }
+
+            PropertyChanges {
+                target: torso
+                x: 0
+                y: 13
+            }
+
+            PropertyChanges {
+                target: image9
+                x: 64
+                y: -97
+            }
+
+            PropertyChanges {
+                target: image6
+                x: -63
+                y: 105
+                rotation: 53
+            }
+
+            PropertyChanges {
+                target: image5
+                x: -122
+                y: 62
+            }
+
+            PropertyChanges {
+                target: image7
+                x: 298
+                y: 95
+                rotation: -43
+            }
+
+            PropertyChanges {
+                target: image8
+                x: 340
+                y: 38
+            }
+
+            PropertyChanges {
+                target: image4
+                x: 179
+                y: 210
+                rotation: -47
+            }
+
+            PropertyChanges {
+                target: image2
+                x: 343
+                y: 224
+                rotation: -92
+            }
+
+            PropertyChanges {
+                target: image1
+                x: -136
+                y: 199
+                rotation: 88
+            }
         }
     ]
     transitions: Transition {

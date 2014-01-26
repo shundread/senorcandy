@@ -32,7 +32,7 @@ Audio::Audio(QObject *parent) :
     ComPtr<IMFMediaEngineClassFactory> factory;
     hr = CoCreateInstance(CLSID_MFMediaEngineClassFactory, nullptr, CLSCTX_ALL, IID_PPV_ARGS(&factory));
     hr = factory->CreateInstance(0, d->attributes.Get(), &d->player);
-    hr = d->player->SetLoop(true);
+    //hr = d->player->SetLoop(true);
 }
 
 Audio::~Audio()

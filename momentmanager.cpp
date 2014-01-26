@@ -308,4 +308,6 @@ void MomentManager::setNegativePeakScore(int negativePeakScore)
 void MomentManager::resetScore()
 {
     d->score = d->peakScore /*= d->negativeScore = d->negativePeakScore*/ = 0;
+    emit scoreChanged();
+    emit negativeScoreChanged();
 }

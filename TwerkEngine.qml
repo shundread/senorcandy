@@ -7,6 +7,8 @@ Item {
     id: engine
     property alias score: momentManager.score
     property alias negativeScore: momentManager.negativeScore
+    property bool twerking: false
+    property bool atEnd: manager.momentIndex >= momentManager.moments.length
 
     signal moved()
 
@@ -51,6 +53,7 @@ Item {
                     return
                 }
                 momentManager.moments[momentIndex].on=true
+                engine.twerking = momentManager.moments[momentIndex].twerkPolicy == 1
             }
         }
 
