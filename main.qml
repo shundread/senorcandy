@@ -18,11 +18,6 @@ Window {
                 onClicked: {
                     console.log("pressed")
                     twerker.start()
-                    audio.play()
-                    console.log(audio.errorString)
-                    console.log(audio.mediaObject)
-                    console.log(audio.error.toString())
-                    console.log(audio.error)
                 }
             }
             Button {

@@ -4,5 +4,6 @@
         <file>main.qml</file>
         <file>TwerkEngine.qml</file>
         <file>audio/track1.wav</file>
+        <file>audio/airhorn.wav</file>
     </qresource>
 </RCC>

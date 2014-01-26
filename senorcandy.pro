@@ -22,7 +22,8 @@ audio.files = audio/*
 audio.path = /audio
 DEPLOYMENT += audio
 
-INSTALLS += audio/track1.wav
+INSTALLS += /audio/track1.wav\
+            /audio/airhorn.wav
 
 RESOURCES += \
     resources.qrc
