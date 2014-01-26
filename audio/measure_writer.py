@@ -38,8 +38,8 @@ def main():
     pygame.init()
     pygame.display.set_mode((10, 10))
 
-    twerkLeft = int(twerkLength*0.25)
-    twerkRight = int(twerkLength*0.75)
+    twerkLeft = int(twerkLength*0.5)
+    twerkRight = int(twerkLength*0.5)
 
     music.load(sys.argv[1])
 
@@ -60,9 +60,10 @@ def main():
 
         if keysdown:
             stamp = music.get_pos()
-            twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 1))
-            start = stamp - twerkLength
-            end = stamp + twerkLength
+            if pygame.key.get_pressed()[pygame.K_d]:
+                twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 3))
+            else:
+                twerkList.append(Twerk(stamp-twerkLeft, stamp+twerkRight, 1, 1))
 
     if len(twerkList) == 0:
         return

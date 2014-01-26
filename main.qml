@@ -156,7 +156,7 @@ Window {
             move: Transition { NumberAnimation { properties: "y" } }
             populate: Transition { NumberAnimation { properties: "y" } }
             Repeater {
-                model: Math.round((twerker.score - twerker.negativeScore)/10)
+                model: (twerker.score - twerker.negativeScore)
                 Rectangle {
                     width: parent.width
                     height: parent.height / 5
