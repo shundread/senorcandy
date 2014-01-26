@@ -9,6 +9,10 @@ Item {
     property alias negativeScore: momentManager.negativeScore
     property bool twerking: false
     property bool atEnd: manager.momentIndex >= momentManager.moments.length
+    onAtEndChanged: {
+        if (atEnd)
+            audio.stop();
+    }
 
     signal moved()
 

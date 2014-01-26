@@ -22,5 +22,7 @@
         <file>audio/senorcandyass.wav</file>
         <file>images/fail.png</file>
         <file>images/pass.png</file>
+        <file>audio/lose.wav</file>
+        <file>audio/win.wav</file>
     </qresource>
 </RCC>

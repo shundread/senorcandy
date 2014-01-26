@@ -211,6 +211,14 @@ Window {
         MouseArea {
             anchors.fill: parent
             visible: twerker.atEnd
+            onVisibleChanged: {
+                if (!visible)
+                    return;
+                if (pass.visible)
+                    passAudio.play();
+                else
+                    failAudio.play();
+            }
             onClicked: twerker.start()
             scale: pressed ? 0.8 : 1
             Image {
@@ -224,6 +232,14 @@ Window {
                 anchors.centerIn: parent
                 source: "images/fail.png"
                 visible: !pass.visible
+            }
+            Audio {
+                id: passAudio
+                source: "audio/win.wav"
+            }
+            Audio {
+                id: failAudio
+                source: "audio/lose.wav"
             }
         }
     }
