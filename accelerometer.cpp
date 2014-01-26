@@ -86,9 +86,9 @@ HRESULT Accelerometer::onReadingChanged(Sensors::IAccelerometer *, Sensors::IAcc
     hr = reading->get_AccelerationX(&x);
     hr = reading->get_AccelerationY(&y);
     hr = reading->get_AccelerationZ(&z);
-    d->reading[0] = x;
-    d->reading[1] = y;
-    d->reading[2] = z;
+    d->reading[0] = x * 10;
+    d->reading[1] = y * 10;
+    d->reading[2] = z * 10;
     emit readingChanged();
     return S_OK;
 }

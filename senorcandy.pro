@@ -2,7 +2,11 @@ QT += core gui quick qml
 
 android: QT += multimedia sensors
 
-SOURCES = main.cpp
+SOURCES = main.cpp \
+    momentmanager.cpp
+
+HEADERS += \
+    momentmanager.h
 
 winrt {
     HEADERS += accelerometer.h audio.h
