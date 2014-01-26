@@ -70,7 +70,7 @@ Item {
 
     Audio {
         id: audio
-        source: "audio/track1.wav"
+        source: "audio/senorcandyass.wav"
     }
 
     // TODO:
@@ -84,9 +84,7 @@ Item {
         id: accelerometer
         active: true
         dataRate: 20
-        onReadingChanged: {
-            //console.log("Reading changed: "+ reading.x + " " + reading.y + " " + reading.z)
-        }
+        onReadingChanged: console.log("Reading changed", reading.x, reading.y, reading.z)
     }
 
     Instantiator {
@@ -344,7 +342,7 @@ Item {
     }
 
     function start() {
-        //audio.play()
+        audio.play()
         manager.restart()
     }
 }

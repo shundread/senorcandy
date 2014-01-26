@@ -1,4 +1,6 @@
-QT += core gui quick sensors qml multimedia
+QT += core gui quick qml
+
+android: QT += multimedia sensors
 
 SOURCES = main.cpp
 
@@ -19,12 +21,9 @@ fonts.files = fonts/*
 fonts.path = /fonts
 DEPLOYMENT += fonts
 
-audio.files = audio/*
+audio.files = audio/*.wav
 audio.path = /audio
 DEPLOYMENT += audio
-
-INSTALLS += /audio/track1.wav\
-            /audio/airhorn.wav
 
 RESOURCES += \
     resources.qrc

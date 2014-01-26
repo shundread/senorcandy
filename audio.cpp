@@ -5,6 +5,7 @@
 
 #include <QCoreApplication>
 #include <QDir>
+#include <QDebug>
 
 #include <wrl.h>
 using namespace Microsoft::WRL;
@@ -53,6 +54,7 @@ void Audio::setSource(const QUrl &source)
     else // hack. needs a qrc handler
         url = QDir::toNativeSeparators(QCoreApplication::applicationDirPath()
                                        + source.toString(QUrl::RemoveScheme));
+    qDebug() << url;
     HRESULT hr = d->player->SetSource((BSTR)url.utf16());
     emit sourceChanged();
 }
@@ -69,5 +71,5 @@ void Audio::play()
 
 void Audio::stop()
 {
-    HRESULT hr = d->player->Pause();
+    HRESULT hr = d->player->Shutdown();
 }

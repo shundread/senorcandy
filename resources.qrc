@@ -19,5 +19,6 @@
         <file>images/rightleg.png</file>
         <file>images/torso.png</file>
         <file>images/start.png</file>
+        <file>audio/senorcandyass.wav</file>
     </qresource>
 </RCC>

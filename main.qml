@@ -9,6 +9,7 @@ Window {
     Audio {
         id: introMusic
         source: "audio/track1.wav"
+        Component.onCompleted: play()
     }
 
     SequentialAnimation {
@@ -40,8 +41,13 @@ Window {
             }
         }
 
-        TwerkEngine {
+        Loader {
             id: twerker
+            asynchronous: true
+            onStatusChanged: {
+                if (status == Loader.Ready)
+                    item.start()
+            }
         }
 
         Candy {
@@ -51,31 +57,44 @@ Window {
             y: 100
             state: "armscrossed"
             opacity: 0
-            SequentialAnimation {
-                running: true
-                PauseAnimation { duration: 500 }
-                PropertyAction { target: introMusic; property: "running"; value: true }
-                PauseAnimation { duration: 2500 }
-                //PropertyAction { target: candy; property: "state"; value: "stand" }
-                NumberAnimation { target: candy; property: "opacity"; to: 1; duration: 2000 }
-                //PauseAnimation { duration: 500 }
-                //PropertyAction { target: candy; property: "state"; value: "armscrossed" }
-                //NumberAnimation { target: candy; property: "x"; duration: 1000; to: 600 }
-                PauseAnimation { duration: 1000 }
-                PropertyAction { target: candy; property: "state"; value: "" }
-                NumberAnimation { target: candy; property: "x"; to: 300 }
-                PropertyAction { target: candy; property: "transitionDuration"; value: 500 }
-                PropertyAction { target: chillTimer; property: "running"; value: true }
-                PropertyAction { target: startButton; property: "state"; value: "ready" }
-            }
+        }
 
-            Timer {
-                id: chillTimer
-                repeat: true
-                interval: 500
-                onTriggered: {
-                    candy.state = candy.state == "chill" ? "" : "chill"
-                }
+        // Candy's intro animation
+        SequentialAnimation {
+            running: true
+            PauseAnimation { duration: 3000 }
+            NumberAnimation { target: candy; property: "opacity"; to: 1; duration: 2000 }
+            PauseAnimation { duration: 1000 }
+            PropertyAction { target: candy; property: "state"; value: "" }
+            NumberAnimation { target: candy; property: "x"; to: 250 }
+            PropertyAction { target: candy; property: "transitionDuration"; value: 500 }
+            PropertyAction { target: chillTimer; property: "running"; value: true }
+            PropertyAction { target: startButton; property: "state"; value: "ready" }
+        }
+
+        // Candy's chill animation
+        Timer {
+            id: chillTimer
+            repeat: true
+            interval: 500
+            onTriggered: {
+                candy.state = candy.state == "chill" ? "" : "chill"
+            }
+        }
+
+        // Transition to game mode
+        SequentialAnimation {
+            id: gameModeTransition
+            NumberAnimation { target: candy; property: "x"; to: 300 }
+            // "Disco Lights"
+            SequentialAnimation {
+                loops: Animation.Infinite
+                ColorAnimation { target: window; property: "color"; to: "red"; duration: 1000 }
+                ColorAnimation { target: window; property: "color"; to: "orange"; duration: 1000 }
+                ColorAnimation { target: window; property: "color"; to: "yellow"; duration: 1000 }
+                ColorAnimation { target: window; property: "color"; to: "green"; duration: 1000 }
+                ColorAnimation { target: window; property: "color"; to: "blue"; duration: 1000 }
+                ColorAnimation { target: window; property: "color"; to: "purple"; duration: 1000 }
             }
         }
 
@@ -88,20 +107,34 @@ Window {
                 source: "images/start.png"
                 scale: parent.pressed ? 0.8 : 1
             }
-            states: State {
-                name: "ready"
-                PropertyChanges { target: startButton; opacity: 1 }
-            }
-            transitions: Transition {
-                NumberAnimation { }
-            }
+            states: [
+                State {
+                    name: "ready"
+                    PropertyChanges { target: startButton; opacity: 1 }
+                },
+                State {
+                    name: "done"
+                    PropertyChanges { target: startButton; visible: false }
+                }
+            ]
+            transitions: [
+                Transition {
+                    NumberAnimation { }
+                },
+                Transition {
+                    to: "done";
+                    NumberAnimation { target: startButton; property: "scale"; to: 0.01; easing.type: Easing.InOutQuad }
+                }
+            ]
             NumberAnimation on scale {
                 running: !startButton.pressed; from: 1; to: 1.1; loops: Animation.Infinite
                 easing.type: Easing.CosineCurve; duration: 2000
             }
             onClicked:  {
                 introMusic.stop()
-                twerker.start()
+                twerker.source = "TwerkEngine.qml"
+                startButton.state = "done"
+                gameModeTransition.start()
             }
         }
     }
