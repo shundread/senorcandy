@@ -10,8 +10,12 @@ Item {
         // Moments
         property var moments: []
         property int momentIndex: 0
+
+        //Scores
         property int score: 0
         property int negScore: 0
+        property int peakScore: 0
+        property int negPeakScore: 0
 
         interval: 100
         running: false
@@ -40,7 +44,9 @@ Item {
                 {
                     console.log("End of the game/stage")
                     console.log("Your final score was:", score)
-                    console.log("Your final negScore was:", score)
+                    console.log("Your final negScore was:", negScore)
+                    console.log("Your final peakScore was:", peakScore)
+                    console.log("Your final negPeakScore was:", negPeakScore)
                     repeat = false
                     return
                 }
@@ -245,6 +251,7 @@ Item {
             // 2 - Punish twerking (sync with non-twerking bits at the player's turn to repeat the pattern)
 
             // Accumulated twerk data
+            property int peakTwerkCount
             property int twerkCount
             property real twerkForce
             property int samples
@@ -284,6 +291,7 @@ Item {
                         {
                             console.log("Peak Twerk")
                             onPeak = false
+                            peakTwerkCount+=1
                         }
                 previousValue = value;
                 amplitude += valueLength;
@@ -301,21 +309,22 @@ Item {
                     if(twerkPolicy == 0)
                         return
 
-                    var twerkScore = twerkCount
                     // Case 1:
                     // We want to see you shake your ass
                     if(twerkPolicy == 1)
                     {
-                        console.log("Excellent job, you get score + ", twerkScore)
-                        manager.score += twerkScore
+                        console.log("++++++++twerkCount++++++++", twerkCount)
+                        manager.score += twerkCount
+                        manager.peakScore += peakTwerkCount
                         return
                     }
 
                     // Case 2:
                     // Hold your ass still
                     // Play boos
-                    manager.negScore += twerkScore
-                    console.log("Bad job, you get negScore - ", twerkScore)
+                    manager.negScore += twerkCount
+                    manager.negPeakScore += peakTwerkCount
+                    console.log("=( =( =( =( twerkcount =( =( =( =( ", twerkCount)
                 }
             }
 
